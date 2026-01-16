@@ -14,7 +14,6 @@ type API interface {
 
 type Service struct {
 	userRepo ports.UserRepo
-	// hasher for register / login
 }
 
 func NewService(ur ports.UserRepo) *Service {

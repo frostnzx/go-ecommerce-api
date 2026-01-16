@@ -1,8 +1,8 @@
 package user
 
 import (
-	"time"
 	"github.com/google/uuid"
+	"time"
 )
 
 type User struct {
@@ -10,15 +10,17 @@ type User struct {
 	Email        string
 	PasswordHash string
 	Name         string
+	IsAdmin      bool
 	CreatedAt    time.Time
 }
 
-func New(email, passwordHash, name string) User {
+func New(email, passwordHash, name string, isAdmin bool) User {
 	return User{
 		ID:           uuid.New(),
 		Email:        email,
 		PasswordHash: passwordHash,
 		Name:         name,
+		IsAdmin:      isAdmin,
 		CreatedAt:    time.Now().UTC(),
 	}
 }

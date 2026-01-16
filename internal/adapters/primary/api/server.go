@@ -4,7 +4,9 @@ import (
 	"net/http"
 
 	"github.com/frostnzx/go-ecommerce-api/internal/core/services/address"
+	"github.com/frostnzx/go-ecommerce-api/internal/core/services/items"
 	"github.com/frostnzx/go-ecommerce-api/internal/core/services/order"
+	"github.com/frostnzx/go-ecommerce-api/internal/core/services/product"
 	"github.com/frostnzx/go-ecommerce-api/internal/core/services/user"
 )
 
@@ -13,8 +15,9 @@ type App struct {
 	userAPI    user.API
 	orderAPI   order.API
 	addressAPI address.API
-	// itemsAPI items.API
-	port int
+	productAPI product.API
+	itemsAPI   items.API
+	port       int
 }
 
 func NewApp(userAPI user.API, orderAPI order.API, addressAPI address.API, addr string) *App {
