@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/frostnzx/go-ecommerce-api/internal/core/domain/user"
+	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -35,7 +36,7 @@ func (ur *UserRepo) GetUser(ctx context.Context, email string) (*user.User, erro
 	}
 	return &u, nil
 }
-func (ur *UserRepo) ListUsers(ctx context.Context, id int64) ([]*user.User, error) {
+func (ur *UserRepo) ListUsers(ctx context.Context) ([]*user.User, error) {
 	var u []*user.User
 	err := ur.db.SelectContext(ctx, &u, "SELECT * FROM users")
 	if err != nil {
@@ -50,10 +51,12 @@ func (ur *UserRepo) UpdateUser(ctx context.Context, u user.User) error {
 	}
 	return nil
 }
-func (ur *UserRepo) DeleteUser(ctx context.Context, id int64) error {
+func (ur *UserRepo) DeleteUser(ctx context.Context, id uuid.UUID) error {
 	err := ur.db.ExecContext(ctx, "DELETE users WHERE id = $1", id)
 	if err != nil {
 		return fmt.Errorf("error deleting user: %w", err)
 	}
 	return nil
 }
+
+// Auth

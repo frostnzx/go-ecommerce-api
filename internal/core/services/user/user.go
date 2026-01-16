@@ -10,6 +10,9 @@ type API interface {
 	RegisterUser(context.Context, RegisterUserReq) (*RegisterUserResp, error)
 	AuthenticateUser(context.Context, AuthenticateUserReq) (*AuthenticateUserResp, error)
 	GetUserProfile(context.Context, GetUserProfileReq) (*GetUserProfileResp, error)
+	UpdateUserProfile(context.Context, UpdateUserProfileReq) error
+	ChangePassword(context.Context, ChangePasswordProfileReq) error
+	DeleteAccount(context.Context, DeleteAccountProfileReq) error
 }
 
 type Service struct {
