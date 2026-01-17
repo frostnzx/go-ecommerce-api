@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"github.com/frostnzx/go-ecommerce-api/internal/core/domain/user"
+	"github.com/google/uuid"
 )
 
 var (
@@ -15,6 +16,7 @@ var (
 type UserRepo interface {
 	Create(ctx context.Context, u user.User) error
 	GetUser(ctx context.Context, email string) (*user.User, error)
+	GetUserById(ctx context.Context, id uuid.UUID) (*user.User, error)
 	ListUsers(ctx context.Context) ([]*user.User, error)
 	UpdateUser(ctx context.Context, u user.User) error
 	DeleteUser(ctx context.Context, id int64) error

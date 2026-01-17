@@ -1,17 +1,23 @@
 package user
 
 import (
-	"github.com/google/uuid"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type User struct {
-	ID           uuid.UUID `db:id`
-	Email        string    `db:email`
-	PasswordHash string    `db:password_hash`
-	Name         string    `db:name`
-	IsAdmin      bool      `db:is_admin`
-	CreatedAt    time.Time `db:created_at`
+	ID           uuid.UUID `db:"id"`
+	Email        string    `db:"email"`
+	PasswordHash string    `db:"password_hash"`
+	Name         string    `db:"name"`
+	IsAdmin      bool      `db:"is_admin"`
+	CreatedAt    time.Time `db:"created_at"`
+}
+type Tokens struct {
+	AccessToken  string
+	RefreshToken string
+	ExpiresAt    time.Time
 }
 
 func New(email, passwordHash, name string, isAdmin bool) User {
