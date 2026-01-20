@@ -13,18 +13,18 @@ import (
 )
 
 type LoginUserReq struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string
+	Password string
 }
 type LoginUserResp struct {
-	SessionID             uuid.UUID `json:"session_id"`
-	AccessToken           string    `json:"access_token"`
-	RefreshToken          string    `json:"refresh_token"`
-	AccessTokenExpiresAt  time.Time `json:"access_token_expires_at"`
-	RefreshTokenExpiresAt time.Time `json:"refresh_token_expires_at"`
-	Name                  string    `json:"name"`
-	Email                 string    `json:"email"`
-	IsAdmin               bool      `json:"is_admin"`
+	SessionID             string
+	AccessToken           string
+	RefreshToken          string
+	AccessTokenExpiresAt  time.Time
+	RefreshTokenExpiresAt time.Time
+	Name                  string
+	Email                 string
+	IsAdmin               bool
 }
 
 func (s *Service) LoginUser(ctx context.Context, req LoginUserReq) (*LoginUserResp, error) {
@@ -37,18 +37,28 @@ func (s *Service) LoginUser(ctx context.Context, req LoginUserReq) (*LoginUserRe
 	}
 	var secretKey = os.Getenv("JWT_SECRET")
 	tokenMaker := utils.NewJWTMaker(secretKey)
-	// create jwt
-	accessToken, accessClaims, err := tokenMaker.CreateToken(user.ID, user.Email, user.IsAdmin, 15*time.Minute)
+
+	// Generate sessionID
+	sessionID, err := uuid.NewRandom()
 	if err != nil {
-		return nil, fmt.Errorf("Error creating accessToken:%w", err)
+		return nil, fmt.Errorf("error generating session ID:%w", err)
 	}
-	refreshToken, refreshClaims, err := tokenMaker.CreateToken(user.ID, user.Email, user.IsAdmin, 7*24*time.Hour)
+	// Create refresh token FIRST
+	refreshToken, refreshClaims, err := tokenMaker.CreateToken(sessionID.String(), user.ID, user.Email, user.IsAdmin, 7*24*time.Hour)
 	if err != nil {
 		return nil, fmt.Errorf("Error creating refreshToken:%w", err)
 	}
 
+	// Create access token with the SAME session ID
+	accessToken, accessClaims, err := tokenMaker.CreateToken(sessionID.String(), user.ID, user.Email, user.IsAdmin, 15*time.Minute)
+	if err != nil {
+		return nil, fmt.Errorf("Error creating accessToken:%w", err)
+	}
+
 	// Create session using the session service
+	// Session ID matches both tokens' SessionID field
 	sess := &session.Session{
+		ID:           refreshClaims.SessionID,
 		Email:        user.Email,
 		RefreshToken: refreshToken,
 		IsRevoked:    false,

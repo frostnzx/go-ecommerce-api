@@ -10,22 +10,25 @@ import (
 
 // claims
 type UserClaims struct {
-	ID      uuid.UUID `json:"id"`
-	Email   string    `json:"email"`
-	IsAdmin bool      `json:"is_admin"`
+	ID        uuid.UUID `json:"id"`
+	Email     string    `json:"email"`
+	IsAdmin   bool      `json:"is_admin"`
+	SessionID string    `json:"session_id"` // Shared session ID for both access and refresh tokens
 	jwt.RegisteredClaims
 }
 
-func NewUserClaims(id uuid.UUID, email string, isAdmin bool, duration time.Duration) (*UserClaims, error) {
+// NewUserClaims creates claims with a new session ID (used for refresh tokens)
+func NewUserClaims(sessionID string, id uuid.UUID, email string, isAdmin bool, duration time.Duration) (*UserClaims, error) {
 	tokenID, err := uuid.NewRandom()
 	if err != nil {
 		return nil, fmt.Errorf("error generating token ID: %w", err)
 	}
 
 	return &UserClaims{
-		Email:   email,
-		ID:      id,
-		IsAdmin: isAdmin,
+		Email:     email,
+		ID:        id,
+		IsAdmin:   isAdmin,
+		SessionID: sessionID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ID:        tokenID.String(),
 			Subject:   email,
@@ -43,8 +46,8 @@ type JWTMaker struct {
 func NewJWTMaker(secretKey string) *JWTMaker {
 	return &JWTMaker{secretKey}
 }
-func (maker *JWTMaker) CreateToken(id uuid.UUID, email string, isAdmin bool, duration time.Duration) (string, *UserClaims, error) {
-	claims, err := NewUserClaims(id, email, isAdmin, duration)
+func (maker *JWTMaker) CreateToken(sessionID string, id uuid.UUID, email string, isAdmin bool, duration time.Duration) (string, *UserClaims, error) {
+	claims, err := NewUserClaims(sessionID, id, email, isAdmin, duration)
 	if err != nil {
 		return "", nil, err
 	}
@@ -57,6 +60,7 @@ func (maker *JWTMaker) CreateToken(id uuid.UUID, email string, isAdmin bool, dur
 
 	return tokenStr, claims, nil
 }
+
 func (maker *JWTMaker) VerifyToken(tokenStr string) (*UserClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenStr, &UserClaims{}, func(token *jwt.Token) (interface{}, error) {
 		// verify the signing method
