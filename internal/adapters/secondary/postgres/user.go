@@ -36,7 +36,7 @@ func (ur *UserRepo) GetUser(ctx context.Context, email string) (*user.User, erro
 	}
 	return &u, nil
 }
-func (ur *UserRepo) GetUserById(ctx context.Context, id uuid.UUID) (*user.User, error) {
+func (ur *UserRepo) GetUserByID(ctx context.Context, id uuid.UUID) (*user.User, error) {
 	var u user.User
 	err := ur.db.GetContext(ctx, &u, "SELECT * FROM users WHERE id=$1", id)
 	if err != nil {

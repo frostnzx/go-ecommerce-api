@@ -16,8 +16,8 @@ var (
 type UserRepo interface {
 	Create(ctx context.Context, u user.User) error
 	GetUser(ctx context.Context, email string) (*user.User, error)
-	GetUserById(ctx context.Context, id uuid.UUID) (*user.User, error)
+	GetUserByID(ctx context.Context, id uuid.UUID) (*user.User, error)
 	ListUsers(ctx context.Context) ([]*user.User, error)
 	UpdateUser(ctx context.Context, u user.User) error
-	DeleteUser(ctx context.Context, id int64) error
+	DeleteUser(ctx context.Context, id uuid.UUID) error
 }

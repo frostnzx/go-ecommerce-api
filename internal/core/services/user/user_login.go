@@ -38,18 +38,14 @@ func (s *Service) LoginUser(ctx context.Context, req LoginUserReq) (*LoginUserRe
 	var secretKey = os.Getenv("JWT_SECRET")
 	tokenMaker := utils.NewJWTMaker(secretKey)
 
-	// Generate sessionID
 	sessionID, err := uuid.NewRandom()
 	if err != nil {
 		return nil, fmt.Errorf("error generating session ID:%w", err)
 	}
-	// Create refresh token FIRST
 	refreshToken, refreshClaims, err := tokenMaker.CreateToken(sessionID.String(), user.ID, user.Email, user.IsAdmin, 7*24*time.Hour)
 	if err != nil {
 		return nil, fmt.Errorf("Error creating refreshToken:%w", err)
 	}
-
-	// Create access token with the SAME session ID
 	accessToken, accessClaims, err := tokenMaker.CreateToken(sessionID.String(), user.ID, user.Email, user.IsAdmin, 15*time.Minute)
 	if err != nil {
 		return nil, fmt.Errorf("Error creating accessToken:%w", err)
