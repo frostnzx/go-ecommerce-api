@@ -8,7 +8,7 @@ import (
 )
 
 type GetUserProfileReq struct {
-	UserID uuid.UUID // Extracted from JWT claims in handler/middleware
+	ID uuid.UUID // Extracted from JWT claims in handler/middleware
 }
 
 type GetUserProfileResp struct {
@@ -19,7 +19,7 @@ type GetUserProfileResp struct {
 }
 
 func (s *Service) GetUserProfile(ctx context.Context, req GetUserProfileReq) (*GetUserProfileResp, error) {
-	user, err := s.userRepo.GetUserByID(ctx, req.UserID)
+	user, err := s.userRepo.GetUserByID(ctx, req.ID)
 	if err != nil {
 		return nil, fmt.Errorf("error getting user: %w", err)
 	}

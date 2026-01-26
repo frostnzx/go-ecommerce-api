@@ -8,12 +8,12 @@ import (
 )
 
 type DeleteAccountProfileReq struct {
-	UserID    uuid.UUID // Extracted from JWT claims in handler/middleware
+	ID        uuid.UUID // Extracted from JWT claims in handler/middleware
 	SessionID string    // To delete the current session after account deletion
 }
 
 func (s *Service) DeleteAccount(ctx context.Context, req DeleteAccountProfileReq) error {
-	err := s.userRepo.DeleteUser(ctx, req.UserID)
+	err := s.userRepo.DeleteUser(ctx, req.ID)
 	if err != nil {
 		return fmt.Errorf("error deleting user: %w", err)
 	}

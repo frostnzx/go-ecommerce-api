@@ -8,13 +8,13 @@ import (
 )
 
 type UpdateUserProfileReq struct {
-	UserID uuid.UUID // Extracted from JWT claims in handler/middleware
-	Name   string
-	Email  string
+	ID    uuid.UUID // Extracted from JWT claims in handler/middleware
+	Name  string
+	Email string
 }
 
 func (s *Service) UpdateUserProfile(ctx context.Context, req UpdateUserProfileReq) error {
-	user, err := s.userRepo.GetUserByID(ctx, req.UserID)
+	user, err := s.userRepo.GetUserByID(ctx, req.ID)
 	if err != nil {
 		return fmt.Errorf("error getting user: %w", err)
 	}
