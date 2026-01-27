@@ -10,12 +10,11 @@ import (
 
 var (
 	ErrCreateOrder = errors.New("cannot create order")
-	ErrAddItem = errors.New("cannot add item")
+	ErrAddItem     = errors.New("cannot add item")
 )
 
 type OrderRepo interface {
 	Create(ctx context.Context, o order.Order) (order.Order, error)
-	AddItems(ctx context.Context, orderID uuid.UUID, items []order.Order) error
 
 	GetByID(ctx context.Context, orderID uuid.UUID) (order.Order, error)
 	ListByUserID(ctx context.Context, userID uuid.UUID) ([]order.Order, error)

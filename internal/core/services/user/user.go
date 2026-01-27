@@ -12,10 +12,11 @@ type API interface {
 	GetUserProfile(context.Context, GetUserProfileReq) (*GetUserProfileResp, error)
 	UpdateUserProfile(context.Context, UpdateUserProfileReq) error
 	ChangePassword(context.Context, ChangePasswordProfileReq) error
-	DeleteAccount(context.Context, DeleteAccountProfileReq) error
+	DeleteAccount(context.Context, DeleteAccountReq) error
 	LoginUser(context.Context, LoginUserReq) (*LoginUserResp, error)
 	LogoutUser(context.Context, LogoutUserReq) error
 	RenewAccessToken(context.Context, RenewAccessTokenReq) (*RenewAccessTokenResp, error)
+	ListUsers(context.Context) (*ListUsersResp, error) // Admin only
 }
 
 type Service struct {

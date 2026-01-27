@@ -9,13 +9,13 @@ import (
 )
 
 type ChangePasswordProfileReq struct {
-	UserID          uuid.UUID // Extracted from JWT claims in handler/middleware
+	ID              uuid.UUID // Extracted from JWT claims in handler/middleware
 	CurrentPassword string
 	NewPassword     string
 }
 
 func (s *Service) ChangePassword(ctx context.Context, req ChangePasswordProfileReq) error {
-	user, err := s.userRepo.GetUserByID(ctx, req.UserID)
+	user, err := s.userRepo.GetUserByID(ctx, req.ID)
 	if err != nil {
 		return fmt.Errorf("error getting user: %w", err)
 	}

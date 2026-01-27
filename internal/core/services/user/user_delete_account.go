@@ -7,12 +7,12 @@ import (
 	"github.com/google/uuid"
 )
 
-type DeleteAccountProfileReq struct {
+type DeleteAccountReq struct {
 	ID        uuid.UUID // Extracted from JWT claims in handler/middleware
 	SessionID string    // To delete the current session after account deletion
 }
 
-func (s *Service) DeleteAccount(ctx context.Context, req DeleteAccountProfileReq) error {
+func (s *Service) DeleteAccount(ctx context.Context, req DeleteAccountReq) error {
 	err := s.userRepo.DeleteUser(ctx, req.ID)
 	if err != nil {
 		return fmt.Errorf("error deleting user: %w", err)

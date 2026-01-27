@@ -8,12 +8,13 @@ import (
 )
 
 var (
-	/* Errors */
+/* Errors */
 )
 
 type ItemsRepo interface {
 	Create(ctx context.Context, item items.Items) (items.Items, error)
 	ListByUserID(ctx context.Context, userID uuid.UUID) ([]items.Items, error)
+	ListByOrderID(ctx context.Context, orderID uuid.UUID) ([]items.Items, error)
 	GetByID(ctx context.Context, id uuid.UUID) (items.Items, error)
-	DeleteById(ctx context.Context, id uuid.UUID) (error)
+	DeleteById(ctx context.Context, id uuid.UUID) error
 }
