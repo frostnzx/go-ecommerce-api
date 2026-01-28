@@ -92,12 +92,6 @@ func (h *Handler) PlaceOrderHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID, err := uuid.Parse(claims.Subject)
-	if err != nil {
-		http.Error(w, "invalid user id", http.StatusBadRequest)
-		return
-	}
-
 	var req placeOrderReq
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "invalid request", http.StatusBadRequest)
@@ -124,7 +118,7 @@ func (h *Handler) PlaceOrderHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	in := coreorder.PlaceOrderReq{
-		UserID:    userID,
+		UserID:    claims.ID,
 		AddressID: addressID,
 		Items:     items,
 	}
@@ -154,14 +148,8 @@ func (h *Handler) ListOrdersHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID, err := uuid.Parse(claims.Subject)
-	if err != nil {
-		http.Error(w, "invalid user id", http.StatusBadRequest)
-		return
-	}
-
 	in := coreorder.ListOrdersReq{
-		UserID: userID,
+		UserID: claims.ID,
 	}
 
 	res, err := h.svc.ListOrders(r.Context(), in)
@@ -194,12 +182,6 @@ func (h *Handler) GetOrderHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID, err := uuid.Parse(claims.Subject)
-	if err != nil {
-		http.Error(w, "invalid user id", http.StatusBadRequest)
-		return
-	}
-
 	orderIDStr := r.PathValue("id")
 	orderID, err := uuid.Parse(orderIDStr)
 	if err != nil {
@@ -209,7 +191,7 @@ func (h *Handler) GetOrderHandler(w http.ResponseWriter, r *http.Request) {
 
 	in := coreorder.GetOrderReq{
 		OrderID: orderID,
-		UserID:  userID,
+		UserID:  claims.ID,
 	}
 
 	res, err := h.svc.GetOrder(r.Context(), in)
@@ -249,12 +231,6 @@ func (h *Handler) CancelOrderHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID, err := uuid.Parse(claims.Subject)
-	if err != nil {
-		http.Error(w, "invalid user id", http.StatusBadRequest)
-		return
-	}
-
 	orderIDStr := r.PathValue("id")
 	orderID, err := uuid.Parse(orderIDStr)
 	if err != nil {
@@ -264,7 +240,7 @@ func (h *Handler) CancelOrderHandler(w http.ResponseWriter, r *http.Request) {
 
 	in := coreorder.CancelOrderReq{
 		OrderID: orderID,
-		UserID:  userID,
+		UserID:  claims.ID,
 	}
 
 	err = h.svc.CancelOrder(r.Context(), in)

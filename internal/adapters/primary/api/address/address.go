@@ -67,18 +67,10 @@ type getDefaultAddressResp struct {
 	Country    string `json:"country"`
 }
 
-// Handlers
-
 func (h *Handler) AddAddressHandler(w http.ResponseWriter, r *http.Request) {
 	claims, ok := auth.GetClaimsFromContext(r.Context())
 	if !ok {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
-		return
-	}
-
-	userID, err := uuid.Parse(claims.Subject)
-	if err != nil {
-		http.Error(w, "invalid user id", http.StatusBadRequest)
 		return
 	}
 
@@ -89,7 +81,7 @@ func (h *Handler) AddAddressHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	in := coreaddress.AddAddressReq{
-		UserID:     userID,
+		UserID:     claims.ID,
 		Line1:      req.Line1,
 		City:       req.City,
 		Province:   req.Province,
@@ -119,14 +111,8 @@ func (h *Handler) ListAddressesHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID, err := uuid.Parse(claims.Subject)
-	if err != nil {
-		http.Error(w, "invalid user id", http.StatusBadRequest)
-		return
-	}
-
 	in := coreaddress.ListAddressesReq{
-		UserID: userID,
+		UserID: claims.ID,
 	}
 
 	res, err := h.svc.ListAddresses(r.Context(), in)
@@ -162,12 +148,6 @@ func (h *Handler) DeleteAddressHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID, err := uuid.Parse(claims.Subject)
-	if err != nil {
-		http.Error(w, "invalid user id", http.StatusBadRequest)
-		return
-	}
-
 	addressIDStr := r.PathValue("id")
 	addressID, err := uuid.Parse(addressIDStr)
 	if err != nil {
@@ -177,7 +157,7 @@ func (h *Handler) DeleteAddressHandler(w http.ResponseWriter, r *http.Request) {
 
 	in := coreaddress.DeleteAddressReq{
 		ID:     addressID,
-		UserID: userID,
+		UserID: claims.ID,
 	}
 
 	err = h.svc.DeleteAddress(r.Context(), in)
@@ -196,12 +176,6 @@ func (h *Handler) SetDefaultAddressHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	userID, err := uuid.Parse(claims.Subject)
-	if err != nil {
-		http.Error(w, "invalid user id", http.StatusBadRequest)
-		return
-	}
-
 	addressIDStr := r.PathValue("id")
 	addressID, err := uuid.Parse(addressIDStr)
 	if err != nil {
@@ -211,7 +185,7 @@ func (h *Handler) SetDefaultAddressHandler(w http.ResponseWriter, r *http.Reques
 
 	in := coreaddress.SetDefaultAddressReq{
 		AddressID: addressID,
-		UserID:    userID,
+		UserID:    claims.ID,
 	}
 
 	err = h.svc.SetDefaultAddress(r.Context(), in)
@@ -230,14 +204,8 @@ func (h *Handler) GetDefaultAddressHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	userID, err := uuid.Parse(claims.Subject)
-	if err != nil {
-		http.Error(w, "invalid user id", http.StatusBadRequest)
-		return
-	}
-
 	in := coreaddress.GetDefaultAddressReq{
-		UserID: userID,
+		UserID: claims.ID,
 	}
 
 	res, err := h.svc.GetDefaultAddress(r.Context(), in)
