@@ -41,17 +41,17 @@ type addAddressReq struct {
 }
 
 type addAddressResp struct {
-	ID string `json:"id"`
+	ID uuid.UUID `json:"id"`
 }
 
 type addressInfoResp struct {
-	ID         string `json:"id"`
-	Line1      string `json:"line1"`
-	City       string `json:"city"`
-	Province   string `json:"province"`
-	PostalCode string `json:"postal_code"`
-	Country    string `json:"country"`
-	IsDefault  bool   `json:"is_default"`
+	ID         uuid.UUID `json:"id"`
+	Line1      string    `json:"line1"`
+	City       string    `json:"city"`
+	Province   string    `json:"province"`
+	PostalCode string    `json:"postal_code"`
+	Country    string    `json:"country"`
+	IsDefault  bool      `json:"is_default"`
 }
 
 type listAddressesResp struct {
@@ -59,12 +59,12 @@ type listAddressesResp struct {
 }
 
 type getDefaultAddressResp struct {
-	ID         string `json:"id"`
-	Line1      string `json:"line1"`
-	City       string `json:"city"`
-	Province   string `json:"province"`
-	PostalCode string `json:"postal_code"`
-	Country    string `json:"country"`
+	ID         uuid.UUID `json:"id"`
+	Line1      string    `json:"line1"`
+	City       string    `json:"city"`
+	Province   string    `json:"province"`
+	PostalCode string    `json:"postal_code"`
+	Country    string    `json:"country"`
 }
 
 func (h *Handler) AddAddressHandler(w http.ResponseWriter, r *http.Request) {
@@ -96,7 +96,7 @@ func (h *Handler) AddAddressHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	resp := addAddressResp{
-		ID: res.ID.String(),
+		ID: res.ID,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -124,7 +124,7 @@ func (h *Handler) ListAddressesHandler(w http.ResponseWriter, r *http.Request) {
 	var addresses []addressInfoResp
 	for _, a := range res.Addresses {
 		addresses = append(addresses, addressInfoResp{
-			ID:         a.ID.String(),
+			ID:         a.ID,
 			Line1:      a.Line1,
 			City:       a.City,
 			Province:   a.Province,
@@ -215,7 +215,7 @@ func (h *Handler) GetDefaultAddressHandler(w http.ResponseWriter, r *http.Reques
 	}
 
 	resp := getDefaultAddressResp{
-		ID:         res.ID.String(),
+		ID:         res.ID,
 		Line1:      res.Line1,
 		City:       res.City,
 		Province:   res.Province,

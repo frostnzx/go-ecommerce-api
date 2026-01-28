@@ -38,18 +38,18 @@ type addItemReq struct {
 }
 
 type addItemResp struct {
-	ID                string  `json:"id"`
-	OrderID           string  `json:"order_id"`
-	ProductID         string  `json:"product_id"`
-	Quantity          int     `json:"quantity"`
-	UnitPriceSnapshot float64 `json:"unit_price_snapshot"`
+	ID                uuid.UUID `json:"id"`
+	OrderID           uuid.UUID `json:"order_id"`
+	ProductID         uuid.UUID `json:"product_id"`
+	Quantity          int       `json:"quantity"`
+	UnitPriceSnapshot float64   `json:"unit_price_snapshot"`
 }
 
 type itemInfoResp struct {
-	ID                string  `json:"id"`
-	ProductID         string  `json:"product_id"`
-	Quantity          int     `json:"quantity"`
-	UnitPriceSnapshot float64 `json:"unit_price_snapshot"`
+	ID                uuid.UUID `json:"id"`
+	ProductID         uuid.UUID `json:"product_id"`
+	Quantity          int       `json:"quantity"`
+	UnitPriceSnapshot float64   `json:"unit_price_snapshot"`
 }
 
 type listItemsResp struct {
@@ -57,17 +57,17 @@ type listItemsResp struct {
 }
 
 type getItemResp struct {
-	ID                string  `json:"id"`
-	OrderID           string  `json:"order_id"`
-	ProductID         string  `json:"product_id"`
-	Quantity          int     `json:"quantity"`
-	UnitPriceSnapshot float64 `json:"unit_price_snapshot"`
+	ID                uuid.UUID `json:"id"`
+	OrderID           uuid.UUID `json:"order_id"`
+	ProductID         uuid.UUID `json:"product_id"`
+	Quantity          int       `json:"quantity"`
+	UnitPriceSnapshot float64   `json:"unit_price_snapshot"`
 }
 
 // Handlers
 
 func (h *Handler) AddItemHandler(w http.ResponseWriter, r *http.Request) {
-	claims, ok := auth.GetClaimsFromContext(r.Context())
+	_, ok := auth.GetClaimsFromContext(r.Context())
 	if !ok {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
@@ -92,15 +92,6 @@ func (h *Handler) AddItemHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID, err := uuid.Parse(claims.Subject)
-	if err != nil {
-		http.Error(w, "invalid user id", http.StatusBadRequest)
-		return
-	}
-
-	// Note: AddItem doesn't verify ownership - you may want to add that
-	_ = userID // We could add ownership check if needed
-
 	in := coreitems.AddItemReq{
 		OrderID:   orderID,
 		ProductID: productID,
@@ -114,9 +105,9 @@ func (h *Handler) AddItemHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	resp := addItemResp{
-		ID:                res.ID.String(),
-		OrderID:           res.OrderID.String(),
-		ProductID:         res.ProductID.String(),
+		ID:                res.ID,
+		OrderID:           res.OrderID,
+		ProductID:         res.ProductID,
 		Quantity:          res.Quantity,
 		UnitPriceSnapshot: res.UnitPriceSnapshot,
 	}
@@ -145,9 +136,9 @@ func (h *Handler) GetItemHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	resp := getItemResp{
-		ID:                res.ID.String(),
-		OrderID:           res.OrderID.String(),
-		ProductID:         res.ProductID.String(),
+		ID:                res.ID,
+		OrderID:           res.OrderID,
+		ProductID:         res.ProductID,
 		Quantity:          res.Quantity,
 		UnitPriceSnapshot: res.UnitPriceSnapshot,
 	}
@@ -164,12 +155,6 @@ func (h *Handler) ListItemsByOrderHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	userID, err := uuid.Parse(claims.Subject)
-	if err != nil {
-		http.Error(w, "invalid user id", http.StatusBadRequest)
-		return
-	}
-
 	orderIDStr := r.PathValue("orderId")
 	orderID, err := uuid.Parse(orderIDStr)
 	if err != nil {
@@ -179,7 +164,7 @@ func (h *Handler) ListItemsByOrderHandler(w http.ResponseWriter, r *http.Request
 
 	in := coreitems.ListItemsByOrderReq{
 		OrderID: orderID,
-		UserID:  userID,
+		UserID:  claims.ID,
 	}
 
 	res, err := h.svc.ListItemsByOrder(r.Context(), in)
@@ -191,8 +176,8 @@ func (h *Handler) ListItemsByOrderHandler(w http.ResponseWriter, r *http.Request
 	var items []itemInfoResp
 	for _, item := range res.Items {
 		items = append(items, itemInfoResp{
-			ID:                item.ID.String(),
-			ProductID:         item.ProductID.String(),
+			ID:                item.ID,
+			ProductID:         item.ProductID,
 			Quantity:          item.Quantity,
 			UnitPriceSnapshot: item.UnitPriceSnapshot,
 		})
@@ -212,14 +197,8 @@ func (h *Handler) ListItemsByUserHandler(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	userID, err := uuid.Parse(claims.Subject)
-	if err != nil {
-		http.Error(w, "invalid user id", http.StatusBadRequest)
-		return
-	}
-
 	in := coreitems.ListItemsByUserReq{
-		UserID: userID,
+		UserID: claims.ID,
 	}
 
 	res, err := h.svc.ListItemsByUser(r.Context(), in)
@@ -231,8 +210,8 @@ func (h *Handler) ListItemsByUserHandler(w http.ResponseWriter, r *http.Request)
 	var items []itemInfoResp
 	for _, item := range res.Items {
 		items = append(items, itemInfoResp{
-			ID:                item.ID.String(),
-			ProductID:         item.ProductID.String(),
+			ID:                item.ID,
+			ProductID:         item.ProductID,
 			Quantity:          item.Quantity,
 			UnitPriceSnapshot: item.UnitPriceSnapshot,
 		})
@@ -249,12 +228,6 @@ func (h *Handler) DeleteItemHandler(w http.ResponseWriter, r *http.Request) {
 	claims, ok := auth.GetClaimsFromContext(r.Context())
 	if !ok {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
-		return
-	}
-
-	userID, err := uuid.Parse(claims.Subject)
-	if err != nil {
-		http.Error(w, "invalid user id", http.StatusBadRequest)
 		return
 	}
 
@@ -275,7 +248,7 @@ func (h *Handler) DeleteItemHandler(w http.ResponseWriter, r *http.Request) {
 	in := coreitems.DeleteItemReq{
 		ID:      itemID,
 		OrderID: orderID,
-		UserID:  userID,
+		UserID:  claims.ID,
 	}
 
 	err = h.svc.DeleteItem(r.Context(), in)

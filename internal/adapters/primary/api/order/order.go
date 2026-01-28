@@ -46,17 +46,17 @@ type placeOrderReq struct {
 }
 
 type placeOrderResp struct {
-	ID          string  `json:"id"`
-	TotalAmount float64 `json:"total_amount"`
-	Status      string  `json:"status"`
-	CreatedAt   string  `json:"created_at"`
+	ID          uuid.UUID `json:"id"`
+	TotalAmount float64   `json:"total_amount"`
+	Status      string    `json:"status"`
+	CreatedAt   string    `json:"created_at"`
 }
 
 type orderInfoResp struct {
-	ID          string  `json:"id"`
-	Status      string  `json:"status"`
-	TotalAmount float64 `json:"total_amount"`
-	CreatedAt   string  `json:"created_at"`
+	ID          uuid.UUID `json:"id"`
+	Status      string    `json:"status"`
+	TotalAmount float64   `json:"total_amount"`
+	CreatedAt   string    `json:"created_at"`
 }
 
 type listOrdersResp struct {
@@ -64,15 +64,15 @@ type listOrdersResp struct {
 }
 
 type orderItemInfoResp struct {
-	ProductID string  `json:"product_id"`
-	Quantity  int     `json:"quantity"`
-	UnitPrice float64 `json:"unit_price"`
+	ProductID uuid.UUID `json:"product_id"`
+	Quantity  int       `json:"quantity"`
+	UnitPrice float64   `json:"unit_price"`
 }
 
 type getOrderResp struct {
-	ID          string              `json:"id"`
-	UserID      string              `json:"user_id"`
-	AddressID   string              `json:"address_id"`
+	ID          uuid.UUID           `json:"id"`
+	UserID      uuid.UUID           `json:"user_id"`
+	AddressID   uuid.UUID           `json:"address_id"`
 	Status      string              `json:"status"`
 	TotalAmount float64             `json:"total_amount"`
 	Items       []orderItemInfoResp `json:"items"`
@@ -130,7 +130,7 @@ func (h *Handler) PlaceOrderHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	resp := placeOrderResp{
-		ID:          res.ID.String(),
+		ID:          res.ID,
 		TotalAmount: res.TotalAmount,
 		Status:      res.Status,
 		CreatedAt:   res.CreatedAt.Format("2006-01-02T15:04:05Z"),
@@ -161,7 +161,7 @@ func (h *Handler) ListOrdersHandler(w http.ResponseWriter, r *http.Request) {
 	var orders []orderInfoResp
 	for _, o := range res.Orders {
 		orders = append(orders, orderInfoResp{
-			ID:          o.ID.String(),
+			ID:          o.ID,
 			Status:      o.Status,
 			TotalAmount: o.TotalAmount,
 			CreatedAt:   o.CreatedAt.Format("2006-01-02T15:04:05Z"),
@@ -203,16 +203,16 @@ func (h *Handler) GetOrderHandler(w http.ResponseWriter, r *http.Request) {
 	var items []orderItemInfoResp
 	for _, item := range res.Items {
 		items = append(items, orderItemInfoResp{
-			ProductID: item.ProductID.String(),
+			ProductID: item.ProductID,
 			Quantity:  item.Quantity,
 			UnitPrice: item.UnitPrice,
 		})
 	}
 
 	resp := getOrderResp{
-		ID:          res.ID.String(),
-		UserID:      res.UserID.String(),
-		AddressID:   res.AddressID.String(),
+		ID:          res.ID,
+		UserID:      res.UserID,
+		AddressID:   res.AddressID,
 		Status:      res.Status,
 		TotalAmount: res.TotalAmount,
 		Items:       items,

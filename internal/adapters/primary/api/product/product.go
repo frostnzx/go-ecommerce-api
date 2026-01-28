@@ -44,31 +44,31 @@ type addProductReq struct {
 }
 
 type addProductResp struct {
-	ID        string `json:"id"`
-	SKU       string `json:"sku"`
-	Name      string `json:"name"`
-	CreatedAt string `json:"created_at"`
+	ID        uuid.UUID `json:"id"`
+	SKU       string    `json:"sku"`
+	Name      string    `json:"name"`
+	CreatedAt string    `json:"created_at"`
 }
 
 type productInfoResp struct {
-	ID          string  `json:"id"`
-	SKU         string  `json:"sku"`
-	Name        string  `json:"name"`
-	Description string  `json:"description"`
-	Price       float64 `json:"price"`
-	StockQty    int     `json:"stock_qty"`
-	Active      bool    `json:"active"`
+	ID          uuid.UUID `json:"id"`
+	SKU         string    `json:"sku"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	Price       float64   `json:"price"`
+	StockQty    int       `json:"stock_qty"`
+	Active      bool      `json:"active"`
 }
 
 type getProductResp struct {
-	ID          string  `json:"id"`
-	SKU         string  `json:"sku"`
-	Name        string  `json:"name"`
-	Description string  `json:"description"`
-	Price       float64 `json:"price"`
-	StockQty    int     `json:"stock_qty"`
-	Active      bool    `json:"active"`
-	CreatedAt   string  `json:"created_at"`
+	ID          uuid.UUID `json:"id"`
+	SKU         string    `json:"sku"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	Price       float64   `json:"price"`
+	StockQty    int       `json:"stock_qty"`
+	Active      bool      `json:"active"`
+	CreatedAt   string    `json:"created_at"`
 }
 
 type listProductsResp struct {
@@ -85,13 +85,13 @@ type editProductReq struct {
 }
 
 type editProductResp struct {
-	ID          string  `json:"id"`
-	SKU         string  `json:"sku"`
-	Name        string  `json:"name"`
-	Description string  `json:"description"`
-	Price       float64 `json:"price"`
-	StockQty    int     `json:"stock_qty"`
-	Active      bool    `json:"active"`
+	ID          uuid.UUID `json:"id"`
+	SKU         string    `json:"sku"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	Price       float64   `json:"price"`
+	StockQty    int       `json:"stock_qty"`
+	Active      bool      `json:"active"`
 }
 
 // Handlers
@@ -118,7 +118,7 @@ func (h *Handler) AddProductHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	resp := addProductResp{
-		ID:        res.ID.String(),
+		ID:        res.ID,
 		SKU:       res.SKU,
 		Name:      res.Name,
 		CreatedAt: res.CreatedAt.Format("2006-01-02T15:04:05Z"),
@@ -148,7 +148,7 @@ func (h *Handler) GetProductHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	resp := getProductResp{
-		ID:          res.ID.String(),
+		ID:          res.ID,
 		SKU:         res.SKU,
 		Name:        res.Name,
 		Description: res.Description,
@@ -173,7 +173,7 @@ func (h *Handler) ListProductsHandler(w http.ResponseWriter, r *http.Request) {
 	var products []productInfoResp
 	for _, p := range res.Products {
 		products = append(products, productInfoResp{
-			ID:          p.ID.String(),
+			ID:          p.ID,
 			SKU:         p.SKU,
 			Name:        p.Name,
 			Description: p.Description,
@@ -221,7 +221,7 @@ func (h *Handler) EditProductHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	resp := editProductResp{
-		ID:          res.ID.String(),
+		ID:          res.ID,
 		SKU:         res.SKU,
 		Name:        res.Name,
 		Description: res.Description,
