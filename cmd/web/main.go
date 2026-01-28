@@ -14,10 +14,37 @@ import (
 	"github.com/frostnzx/go-ecommerce-api/internal/core/services/session"
 	"github.com/frostnzx/go-ecommerce-api/internal/core/services/user"
 	"github.com/jmoiron/sqlx"
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq" // PostgreSQL driver
+
+	_ "github.com/frostnzx/go-ecommerce-api/docs" // Swagger docs
 )
 
+// @title           E-Commerce API
+// @version         1.0
+// @description     A RESTful e-commerce API built with Go using hexagonal architecture.
+// @description     Features: User authentication (JWT), Product management, Order processing, Address management.
+
+// @contact.name   API Support
+// @contact.email  support@example.com
+
+// @license.name  MIT
+// @license.url   https://opensource.org/licenses/MIT
+
+// @host      localhost:8080
+// @BasePath  /
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description Type "Bearer" followed by a space and JWT token.
+
 func main() {
+	// Load .env file
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found, using environment variables")
+	}
+
 	// Load configuration from environment variables
 	dbHost := getEnv("DB_HOST", "localhost")
 	dbPort := getEnv("DB_PORT", "5432")

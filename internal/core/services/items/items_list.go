@@ -1,4 +1,3 @@
-// filepath: /home/frostnzx/dev/go-ecommerce-api/internal/core/services/items/items_list.go
 package items
 
 import (

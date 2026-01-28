@@ -16,6 +16,8 @@ import (
 	orderhandler "github.com/frostnzx/go-ecommerce-api/internal/adapters/primary/api/order"
 	producthandler "github.com/frostnzx/go-ecommerce-api/internal/adapters/primary/api/product"
 	userhandler "github.com/frostnzx/go-ecommerce-api/internal/adapters/primary/api/user"
+
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
 type App struct {
@@ -29,6 +31,11 @@ type App struct {
 
 func NewApp(userAPI user.API, orderAPI order.API, addressAPI address.API, productAPI product.API, itemsAPI items.API, addr string) *App {
 	mux := http.NewServeMux()
+
+	// Swagger documentation route
+	mux.Handle("GET /swagger/", httpSwagger.Handler(
+		httpSwagger.URL("/swagger/doc.json"),
+	))
 
 	// Create JWT maker and auth middleware
 	secretKey := os.Getenv("JWT_SECRET")

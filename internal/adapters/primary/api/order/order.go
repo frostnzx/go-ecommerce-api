@@ -85,6 +85,18 @@ type updateStatusReq struct {
 
 // Handlers
 
+// PlaceOrderHandler godoc
+// @Summary      Place a new order
+// @Description  Create a new order with items
+// @Tags         Orders
+// @Accept       json
+// @Produce      json
+// @Param        request body placeOrderReq true "Order data"
+// @Success      201 {object} placeOrderResp
+// @Failure      400 {string} string "Invalid request"
+// @Failure      401 {string} string "Unauthorized"
+// @Security     BearerAuth
+// @Router       /orders [post]
 func (h *Handler) PlaceOrderHandler(w http.ResponseWriter, r *http.Request) {
 	claims, ok := auth.GetClaimsFromContext(r.Context())
 	if !ok {
@@ -141,6 +153,17 @@ func (h *Handler) PlaceOrderHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
+// ListOrdersHandler godoc
+// @Summary      List user orders
+// @Description  Get all orders for the authenticated user
+// @Tags         Orders
+// @Accept       json
+// @Produce      json
+// @Success      200 {object} listOrdersResp
+// @Failure      401 {string} string "Unauthorized"
+// @Failure      500 {string} string "Internal server error"
+// @Security     BearerAuth
+// @Router       /orders [get]
 func (h *Handler) ListOrdersHandler(w http.ResponseWriter, r *http.Request) {
 	claims, ok := auth.GetClaimsFromContext(r.Context())
 	if !ok {
@@ -175,6 +198,19 @@ func (h *Handler) ListOrdersHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
+// GetOrderHandler godoc
+// @Summary      Get order details
+// @Description  Get order details by ID
+// @Tags         Orders
+// @Accept       json
+// @Produce      json
+// @Param        id path string true "Order ID"
+// @Success      200 {object} getOrderResp
+// @Failure      400 {string} string "Invalid request"
+// @Failure      401 {string} string "Unauthorized"
+// @Failure      404 {string} string "Not found"
+// @Security     BearerAuth
+// @Router       /orders/{id} [get]
 func (h *Handler) GetOrderHandler(w http.ResponseWriter, r *http.Request) {
 	claims, ok := auth.GetClaimsFromContext(r.Context())
 	if !ok {
@@ -224,6 +260,18 @@ func (h *Handler) GetOrderHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
+// CancelOrderHandler godoc
+// @Summary      Cancel an order
+// @Description  Cancel an order by ID
+// @Tags         Orders
+// @Accept       json
+// @Produce      json
+// @Param        id path string true "Order ID"
+// @Success      204 {string} string "No Content"
+// @Failure      400 {string} string "Invalid request"
+// @Failure      401 {string} string "Unauthorized"
+// @Security     BearerAuth
+// @Router       /orders/{id}/cancel [post]
 func (h *Handler) CancelOrderHandler(w http.ResponseWriter, r *http.Request) {
 	claims, ok := auth.GetClaimsFromContext(r.Context())
 	if !ok {
@@ -252,6 +300,20 @@ func (h *Handler) CancelOrderHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+// UpdateOrderStatusHandler godoc
+// @Summary      Update order status (Admin)
+// @Description  Update the status of an order (admin only)
+// @Tags         Admin
+// @Accept       json
+// @Produce      json
+// @Param        id path string true "Order ID"
+// @Param        request body updateStatusReq true "New status"
+// @Success      204 {string} string "No Content"
+// @Failure      400 {string} string "Invalid request"
+// @Failure      401 {string} string "Unauthorized"
+// @Failure      403 {string} string "Forbidden"
+// @Security     BearerAuth
+// @Router       /admin/orders/{id}/status [put]
 func (h *Handler) UpdateOrderStatusHandler(w http.ResponseWriter, r *http.Request) {
 	orderIDStr := r.PathValue("id")
 	orderID, err := uuid.Parse(orderIDStr)

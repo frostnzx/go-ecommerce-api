@@ -118,6 +118,17 @@ func (h *Handler) SetupRoutes(mux *http.ServeMux) {
 	mux.Handle("GET /admin/users", h.adminMiddleware(http.HandlerFunc(h.ListAllUsersHandler)))
 }
 
+// RegisterUserHandler godoc
+// @Summary      Register a new user
+// @Description  Create a new user account
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Param        request body registerUserRequest true "User registration data"
+// @Success      201 {object} registerUserResp
+// @Failure      400 {string} string "Invalid request"
+// @Failure      500 {string} string "Internal server error"
+// @Router       /auth/register [post]
 func (h *Handler) RegisterUserHandler(w http.ResponseWriter, r *http.Request) {
 	var req registerUserRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -143,6 +154,20 @@ func (h *Handler) RegisterUserHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
+// GetUserProfileHandler godoc
+// @Summary      Get user profile
+// @Description  Get user profile by ID
+// @Tags         Users
+// @Accept       json
+// @Produce      json
+// @Param        id path string true "User ID"
+// @Param        request body getUserProfileReq true "User ID"
+// @Success      200 {object} getUserProfileResp
+// @Failure      400 {string} string "Invalid request"
+// @Failure      401 {string} string "Unauthorized"
+// @Failure      500 {string} string "Internal server error"
+// @Security     BearerAuth
+// @Router       /users/{id} [get]
 func (h *Handler) GetUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	var req getUserProfileReq
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -168,6 +193,20 @@ func (h *Handler) GetUserProfileHandler(w http.ResponseWriter, r *http.Request) 
 	json.NewEncoder(w).Encode(resp)
 }
 
+// UpdateUserProfileHandler godoc
+// @Summary      Update user profile
+// @Description  Update user profile information
+// @Tags         Users
+// @Accept       json
+// @Produce      json
+// @Param        id path string true "User ID"
+// @Param        request body updateUserProfileReq true "Updated profile data"
+// @Success      200 {string} string "OK"
+// @Failure      400 {string} string "Invalid request"
+// @Failure      401 {string} string "Unauthorized"
+// @Failure      500 {string} string "Internal server error"
+// @Security     BearerAuth
+// @Router       /users/{id} [put]
 func (h *Handler) UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	var req updateUserProfileReq
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -188,6 +227,20 @@ func (h *Handler) UpdateUserProfileHandler(w http.ResponseWriter, r *http.Reques
 	w.WriteHeader(http.StatusOK) // 200
 }
 
+// ChangePasswordHandler godoc
+// @Summary      Change password
+// @Description  Change user password
+// @Tags         Users
+// @Accept       json
+// @Produce      json
+// @Param        id path string true "User ID"
+// @Param        request body changePasswordProfileReq true "Password change data"
+// @Success      204 {string} string "No Content"
+// @Failure      400 {string} string "Invalid request"
+// @Failure      401 {string} string "Unauthorized"
+// @Failure      500 {string} string "Internal server error"
+// @Security     BearerAuth
+// @Router       /users/{id}/password [put]
 func (h *Handler) ChangePasswordHandler(w http.ResponseWriter, r *http.Request) {
 	var req changePasswordProfileReq
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -207,6 +260,20 @@ func (h *Handler) ChangePasswordHandler(w http.ResponseWriter, r *http.Request) 
 	w.WriteHeader(http.StatusNoContent) // 204
 }
 
+// DeleteAccountHandler godoc
+// @Summary      Delete account
+// @Description  Delete user account
+// @Tags         Users
+// @Accept       json
+// @Produce      json
+// @Param        id path string true "User ID"
+// @Param        request body deleteAccountReq true "Account deletion data"
+// @Success      204 {string} string "No Content"
+// @Failure      400 {string} string "Invalid request"
+// @Failure      401 {string} string "Unauthorized"
+// @Failure      500 {string} string "Internal server error"
+// @Security     BearerAuth
+// @Router       /users/{id} [delete]
 func (h *Handler) DeleteAccountHandler(w http.ResponseWriter, r *http.Request) {
 	claims, ok := auth.GetClaimsFromContext(r.Context())
 	if !ok {
@@ -230,6 +297,17 @@ func (h *Handler) DeleteAccountHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent) // 204
 }
 
+// LoginHandler godoc
+// @Summary      Login user
+// @Description  Authenticate user and return tokens
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Param        request body loginUserReq true "Login credentials"
+// @Success      200 {object} loginUserResp
+// @Failure      400 {string} string "Invalid request"
+// @Failure      401 {string} string "Unauthorized"
+// @Router       /auth/login [post]
 func (h *Handler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	var req loginUserReq
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -259,6 +337,17 @@ func (h *Handler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
+// LogoutHandler godoc
+// @Summary      Logout user
+// @Description  Invalidate user session
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Success      204 {string} string "No Content"
+// @Failure      401 {string} string "Unauthorized"
+// @Failure      500 {string} string "Internal server error"
+// @Security     BearerAuth
+// @Router       /auth/logout [post]
 func (h *Handler) LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	claims, ok := auth.GetClaimsFromContext(r.Context())
 	if !ok {
@@ -276,6 +365,17 @@ func (h *Handler) LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent) // 204
 }
 
+// RenewAccessTokenHandler godoc
+// @Summary      Renew access token
+// @Description  Get a new access token using refresh token
+// @Tags         Auth
+// @Accept       json
+// @Produce      json
+// @Param        request body renewAccessTokenReq true "Refresh token"
+// @Success      200 {object} renewAccessTokenResp
+// @Failure      400 {string} string "Invalid request"
+// @Failure      401 {string} string "Unauthorized"
+// @Router       /auth/renew [post]
 func (h *Handler) RenewAccessTokenHandler(w http.ResponseWriter, r *http.Request) {
 	var req renewAccessTokenReq
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -299,6 +399,18 @@ func (h *Handler) RenewAccessTokenHandler(w http.ResponseWriter, r *http.Request
 	json.NewEncoder(w).Encode(resp)
 }
 
+// ListAllUsersHandler godoc
+// @Summary      List all users (Admin)
+// @Description  Get a list of all users (admin only)
+// @Tags         Admin
+// @Accept       json
+// @Produce      json
+// @Success      200 {object} listUsersResp
+// @Failure      401 {string} string "Unauthorized"
+// @Failure      403 {string} string "Forbidden"
+// @Failure      500 {string} string "Internal server error"
+// @Security     BearerAuth
+// @Router       /admin/users [get]
 func (h *Handler) ListAllUsersHandler(w http.ResponseWriter, r *http.Request) {
 	res, err := h.svc.ListUsers(r.Context())
 	if err != nil {

@@ -1,4 +1,3 @@
-// filepath: /home/frostnzx/dev/go-ecommerce-api/internal/adapters/primary/api/items/items.go
 package items
 
 import (
@@ -66,6 +65,19 @@ type getItemResp struct {
 
 // Handlers
 
+// AddItemHandler godoc
+// @Summary      Add item to order
+// @Description  Add a new item to an existing order
+// @Tags         Items
+// @Accept       json
+// @Produce      json
+// @Param        orderId path string true "Order ID"
+// @Param        request body addItemReq true "Item data"
+// @Success      201 {object} addItemResp
+// @Failure      400 {string} string "Invalid request"
+// @Failure      401 {string} string "Unauthorized"
+// @Security     BearerAuth
+// @Router       /orders/{orderId}/items [post]
 func (h *Handler) AddItemHandler(w http.ResponseWriter, r *http.Request) {
 	_, ok := auth.GetClaimsFromContext(r.Context())
 	if !ok {
@@ -117,6 +129,19 @@ func (h *Handler) AddItemHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
+// GetItemHandler godoc
+// @Summary      Get item details
+// @Description  Get item details by ID
+// @Tags         Items
+// @Accept       json
+// @Produce      json
+// @Param        orderId path string true "Order ID"
+// @Param        id path string true "Item ID"
+// @Success      200 {object} getItemResp
+// @Failure      400 {string} string "Invalid request"
+// @Failure      404 {string} string "Not found"
+// @Security     BearerAuth
+// @Router       /orders/{orderId}/items/{id} [get]
 func (h *Handler) GetItemHandler(w http.ResponseWriter, r *http.Request) {
 	itemIDStr := r.PathValue("id")
 	itemID, err := uuid.Parse(itemIDStr)
@@ -148,6 +173,18 @@ func (h *Handler) GetItemHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
+// ListItemsByOrderHandler godoc
+// @Summary      List items by order
+// @Description  Get all items for a specific order
+// @Tags         Items
+// @Accept       json
+// @Produce      json
+// @Param        orderId path string true "Order ID"
+// @Success      200 {object} listItemsResp
+// @Failure      400 {string} string "Invalid request"
+// @Failure      401 {string} string "Unauthorized"
+// @Security     BearerAuth
+// @Router       /orders/{orderId}/items [get]
 func (h *Handler) ListItemsByOrderHandler(w http.ResponseWriter, r *http.Request) {
 	claims, ok := auth.GetClaimsFromContext(r.Context())
 	if !ok {
@@ -190,6 +227,17 @@ func (h *Handler) ListItemsByOrderHandler(w http.ResponseWriter, r *http.Request
 	json.NewEncoder(w).Encode(resp)
 }
 
+// ListItemsByUserHandler godoc
+// @Summary      List all user items
+// @Description  Get all items across all orders for the authenticated user
+// @Tags         Items
+// @Accept       json
+// @Produce      json
+// @Success      200 {object} listItemsResp
+// @Failure      401 {string} string "Unauthorized"
+// @Failure      500 {string} string "Internal server error"
+// @Security     BearerAuth
+// @Router       /items [get]
 func (h *Handler) ListItemsByUserHandler(w http.ResponseWriter, r *http.Request) {
 	claims, ok := auth.GetClaimsFromContext(r.Context())
 	if !ok {
@@ -224,6 +272,19 @@ func (h *Handler) ListItemsByUserHandler(w http.ResponseWriter, r *http.Request)
 	json.NewEncoder(w).Encode(resp)
 }
 
+// DeleteItemHandler godoc
+// @Summary      Delete an item
+// @Description  Delete an item from an order
+// @Tags         Items
+// @Accept       json
+// @Produce      json
+// @Param        orderId path string true "Order ID"
+// @Param        id path string true "Item ID"
+// @Success      204 {string} string "No Content"
+// @Failure      400 {string} string "Invalid request"
+// @Failure      401 {string} string "Unauthorized"
+// @Security     BearerAuth
+// @Router       /orders/{orderId}/items/{id} [delete]
 func (h *Handler) DeleteItemHandler(w http.ResponseWriter, r *http.Request) {
 	claims, ok := auth.GetClaimsFromContext(r.Context())
 	if !ok {

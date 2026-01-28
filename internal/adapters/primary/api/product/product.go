@@ -1,4 +1,3 @@
-// filepath: /home/frostnzx/dev/go-ecommerce-api/internal/adapters/primary/api/product/product.go
 package product
 
 import (
@@ -96,6 +95,19 @@ type editProductResp struct {
 
 // Handlers
 
+// AddProductHandler godoc
+// @Summary      Add a new product (Admin)
+// @Description  Create a new product (admin only)
+// @Tags         Admin
+// @Accept       json
+// @Produce      json
+// @Param        request body addProductReq true "Product data"
+// @Success      201 {object} addProductResp
+// @Failure      400 {string} string "Invalid request"
+// @Failure      401 {string} string "Unauthorized"
+// @Failure      403 {string} string "Forbidden"
+// @Security     BearerAuth
+// @Router       /admin/products [post]
 func (h *Handler) AddProductHandler(w http.ResponseWriter, r *http.Request) {
 	var req addProductReq
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -129,6 +141,17 @@ func (h *Handler) AddProductHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
+// GetProductHandler godoc
+// @Summary      Get a product
+// @Description  Get product details by ID
+// @Tags         Products
+// @Accept       json
+// @Produce      json
+// @Param        id path string true "Product ID"
+// @Success      200 {object} getProductResp
+// @Failure      400 {string} string "Invalid request"
+// @Failure      404 {string} string "Not found"
+// @Router       /products/{id} [get]
 func (h *Handler) GetProductHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
 	id, err := uuid.Parse(idStr)
@@ -163,6 +186,15 @@ func (h *Handler) GetProductHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
+// ListProductsHandler godoc
+// @Summary      List all products
+// @Description  Get a list of all products
+// @Tags         Products
+// @Accept       json
+// @Produce      json
+// @Success      200 {object} listProductsResp
+// @Failure      500 {string} string "Internal server error"
+// @Router       /products [get]
 func (h *Handler) ListProductsHandler(w http.ResponseWriter, r *http.Request) {
 	res, err := h.svc.ListProducts(r.Context())
 	if err != nil {
@@ -190,6 +222,20 @@ func (h *Handler) ListProductsHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
+// EditProductHandler godoc
+// @Summary      Edit a product (Admin)
+// @Description  Update product details (admin only)
+// @Tags         Admin
+// @Accept       json
+// @Produce      json
+// @Param        id path string true "Product ID"
+// @Param        request body editProductReq true "Updated product data"
+// @Success      200 {object} editProductResp
+// @Failure      400 {string} string "Invalid request"
+// @Failure      401 {string} string "Unauthorized"
+// @Failure      403 {string} string "Forbidden"
+// @Security     BearerAuth
+// @Router       /admin/products/{id} [put]
 func (h *Handler) EditProductHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
 	id, err := uuid.Parse(idStr)
@@ -235,6 +281,20 @@ func (h *Handler) EditProductHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
+// DeleteProductHandler godoc
+// @Summary      Delete a product (Admin)
+// @Description  Delete a product by ID (admin only)
+// @Tags         Admin
+// @Accept       json
+// @Produce      json
+// @Param        id path string true "Product ID"
+// @Success      204 {string} string "No Content"
+// @Failure      400 {string} string "Invalid request"
+// @Failure      401 {string} string "Unauthorized"
+// @Failure      403 {string} string "Forbidden"
+// @Failure      404 {string} string "Not found"
+// @Security     BearerAuth
+// @Router       /admin/products/{id} [delete]
 func (h *Handler) DeleteProductHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
 	id, err := uuid.Parse(idStr)

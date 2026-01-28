@@ -1,4 +1,3 @@
-// filepath: /home/frostnzx/dev/go-ecommerce-api/internal/adapters/primary/api/address/address.go
 package address
 
 import (
@@ -23,7 +22,6 @@ func New(svc coreaddress.API, authMiddleware func(http.Handler) http.Handler) *H
 }
 
 func (h *Handler) SetupRoutes(mux *http.ServeMux) {
-	// All address routes require authentication
 	mux.Handle("POST /addresses", h.authMiddleware(http.HandlerFunc(h.AddAddressHandler)))
 	mux.Handle("GET /addresses", h.authMiddleware(http.HandlerFunc(h.ListAddressesHandler)))
 	mux.Handle("DELETE /addresses/{id}", h.authMiddleware(http.HandlerFunc(h.DeleteAddressHandler)))
@@ -67,6 +65,18 @@ type getDefaultAddressResp struct {
 	Country    string    `json:"country"`
 }
 
+// AddAddressHandler godoc
+// @Summary      Add a new address
+// @Description  Create a new address for the authenticated user
+// @Tags         Addresses
+// @Accept       json
+// @Produce      json
+// @Param        request body addAddressReq true "Address data"
+// @Success      201 {object} addAddressResp
+// @Failure      400 {string} string "Invalid request"
+// @Failure      401 {string} string "Unauthorized"
+// @Security     BearerAuth
+// @Router       /addresses [post]
 func (h *Handler) AddAddressHandler(w http.ResponseWriter, r *http.Request) {
 	claims, ok := auth.GetClaimsFromContext(r.Context())
 	if !ok {
@@ -95,15 +105,23 @@ func (h *Handler) AddAddressHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp := addAddressResp{
-		ID: res.ID,
-	}
-
+	resp := addAddressResp{ID: res.ID}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(resp)
 }
 
+// ListAddressesHandler godoc
+// @Summary      List all addresses
+// @Description  Get all addresses for the authenticated user
+// @Tags         Addresses
+// @Accept       json
+// @Produce      json
+// @Success      200 {object} listAddressesResp
+// @Failure      401 {string} string "Unauthorized"
+// @Failure      500 {string} string "Internal server error"
+// @Security     BearerAuth
+// @Router       /addresses [get]
 func (h *Handler) ListAddressesHandler(w http.ResponseWriter, r *http.Request) {
 	claims, ok := auth.GetClaimsFromContext(r.Context())
 	if !ok {
@@ -111,10 +129,7 @@ func (h *Handler) ListAddressesHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	in := coreaddress.ListAddressesReq{
-		UserID: claims.ID,
-	}
-
+	in := coreaddress.ListAddressesReq{UserID: claims.ID}
 	res, err := h.svc.ListAddresses(r.Context(), in)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -135,12 +150,23 @@ func (h *Handler) ListAddressesHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	resp := listAddressesResp{Addresses: addresses}
-
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(resp)
 }
 
+// DeleteAddressHandler godoc
+// @Summary      Delete an address
+// @Description  Delete an address by ID
+// @Tags         Addresses
+// @Accept       json
+// @Produce      json
+// @Param        id path string true "Address ID"
+// @Success      204 {string} string "No Content"
+// @Failure      400 {string} string "Invalid request"
+// @Failure      401 {string} string "Unauthorized"
+// @Security     BearerAuth
+// @Router       /addresses/{id} [delete]
 func (h *Handler) DeleteAddressHandler(w http.ResponseWriter, r *http.Request) {
 	claims, ok := auth.GetClaimsFromContext(r.Context())
 	if !ok {
@@ -155,11 +181,7 @@ func (h *Handler) DeleteAddressHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	in := coreaddress.DeleteAddressReq{
-		ID:     addressID,
-		UserID: claims.ID,
-	}
-
+	in := coreaddress.DeleteAddressReq{ID: addressID, UserID: claims.ID}
 	err = h.svc.DeleteAddress(r.Context(), in)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -169,6 +191,18 @@ func (h *Handler) DeleteAddressHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+// SetDefaultAddressHandler godoc
+// @Summary      Set default address
+// @Description  Set an address as the default address
+// @Tags         Addresses
+// @Accept       json
+// @Produce      json
+// @Param        id path string true "Address ID"
+// @Success      204 {string} string "No Content"
+// @Failure      400 {string} string "Invalid request"
+// @Failure      401 {string} string "Unauthorized"
+// @Security     BearerAuth
+// @Router       /addresses/{id}/default [put]
 func (h *Handler) SetDefaultAddressHandler(w http.ResponseWriter, r *http.Request) {
 	claims, ok := auth.GetClaimsFromContext(r.Context())
 	if !ok {
@@ -183,11 +217,7 @@ func (h *Handler) SetDefaultAddressHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	in := coreaddress.SetDefaultAddressReq{
-		AddressID: addressID,
-		UserID:    claims.ID,
-	}
-
+	in := coreaddress.SetDefaultAddressReq{AddressID: addressID, UserID: claims.ID}
 	err = h.svc.SetDefaultAddress(r.Context(), in)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -197,6 +227,17 @@ func (h *Handler) SetDefaultAddressHandler(w http.ResponseWriter, r *http.Reques
 	w.WriteHeader(http.StatusNoContent)
 }
 
+// GetDefaultAddressHandler godoc
+// @Summary      Get default address
+// @Description  Get the default address for the authenticated user
+// @Tags         Addresses
+// @Accept       json
+// @Produce      json
+// @Success      200 {object} getDefaultAddressResp
+// @Failure      401 {string} string "Unauthorized"
+// @Failure      404 {string} string "Not found"
+// @Security     BearerAuth
+// @Router       /addresses/default [get]
 func (h *Handler) GetDefaultAddressHandler(w http.ResponseWriter, r *http.Request) {
 	claims, ok := auth.GetClaimsFromContext(r.Context())
 	if !ok {
@@ -204,10 +245,7 @@ func (h *Handler) GetDefaultAddressHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	in := coreaddress.GetDefaultAddressReq{
-		UserID: claims.ID,
-	}
-
+	in := coreaddress.GetDefaultAddressReq{UserID: claims.ID}
 	res, err := h.svc.GetDefaultAddress(r.Context(), in)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)

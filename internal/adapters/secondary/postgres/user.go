@@ -22,7 +22,7 @@ func NewUserRepo(db *sqlx.DB) (*UserRepo, error) {
 }
 
 func (ur *UserRepo) Create(ctx context.Context, u user.User) error {
-	_, err := ur.db.NamedExecContext(ctx, "INSERT INTO users (email, password_hash, name , is_admin) VALUES (:email, :password_hash, :name, :is_admin)", u)
+	_, err := ur.db.NamedExecContext(ctx, "INSERT INTO users (id , email, password_hash, name , is_admin , created_at) VALUES (:id , :email, :password_hash, :name, :is_admin , :created_at)", u)
 	if err != nil {
 		return fmt.Errorf("error create user %w", err)
 	}

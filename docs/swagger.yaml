@@ -1,0 +1,1359 @@
+basePath: /
+definitions:
+  internal_adapters_primary_api_address.addAddressReq:
+    properties:
+      city:
+        type: string
+      country:
+        type: string
+      line1:
+        type: string
+      postal_code:
+        type: string
+      province:
+        type: string
+    type: object
+  internal_adapters_primary_api_address.addAddressResp:
+    properties:
+      id:
+        type: string
+    type: object
+  internal_adapters_primary_api_address.addressInfoResp:
+    properties:
+      city:
+        type: string
+      country:
+        type: string
+      id:
+        type: string
+      is_default:
+        type: boolean
+      line1:
+        type: string
+      postal_code:
+        type: string
+      province:
+        type: string
+    type: object
+  internal_adapters_primary_api_address.getDefaultAddressResp:
+    properties:
+      city:
+        type: string
+      country:
+        type: string
+      id:
+        type: string
+      line1:
+        type: string
+      postal_code:
+        type: string
+      province:
+        type: string
+    type: object
+  internal_adapters_primary_api_address.listAddressesResp:
+    properties:
+      addresses:
+        items:
+          $ref: '#/definitions/internal_adapters_primary_api_address.addressInfoResp'
+        type: array
+    type: object
+  internal_adapters_primary_api_items.addItemReq:
+    properties:
+      product_id:
+        type: string
+      quantity:
+        type: integer
+    type: object
+  internal_adapters_primary_api_items.addItemResp:
+    properties:
+      id:
+        type: string
+      order_id:
+        type: string
+      product_id:
+        type: string
+      quantity:
+        type: integer
+      unit_price_snapshot:
+        type: number
+    type: object
+  internal_adapters_primary_api_items.getItemResp:
+    properties:
+      id:
+        type: string
+      order_id:
+        type: string
+      product_id:
+        type: string
+      quantity:
+        type: integer
+      unit_price_snapshot:
+        type: number
+    type: object
+  internal_adapters_primary_api_items.itemInfoResp:
+    properties:
+      id:
+        type: string
+      product_id:
+        type: string
+      quantity:
+        type: integer
+      unit_price_snapshot:
+        type: number
+    type: object
+  internal_adapters_primary_api_items.listItemsResp:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/internal_adapters_primary_api_items.itemInfoResp'
+        type: array
+    type: object
+  internal_adapters_primary_api_order.getOrderResp:
+    properties:
+      address_id:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      items:
+        items:
+          $ref: '#/definitions/internal_adapters_primary_api_order.orderItemInfoResp'
+        type: array
+      status:
+        type: string
+      total_amount:
+        type: number
+      user_id:
+        type: string
+    type: object
+  internal_adapters_primary_api_order.listOrdersResp:
+    properties:
+      orders:
+        items:
+          $ref: '#/definitions/internal_adapters_primary_api_order.orderInfoResp'
+        type: array
+    type: object
+  internal_adapters_primary_api_order.orderInfoResp:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      status:
+        type: string
+      total_amount:
+        type: number
+    type: object
+  internal_adapters_primary_api_order.orderItemInfoResp:
+    properties:
+      product_id:
+        type: string
+      quantity:
+        type: integer
+      unit_price:
+        type: number
+    type: object
+  internal_adapters_primary_api_order.orderItemReq:
+    properties:
+      product_id:
+        type: string
+      quantity:
+        type: integer
+    type: object
+  internal_adapters_primary_api_order.placeOrderReq:
+    properties:
+      address_id:
+        type: string
+      items:
+        items:
+          $ref: '#/definitions/internal_adapters_primary_api_order.orderItemReq'
+        type: array
+    type: object
+  internal_adapters_primary_api_order.placeOrderResp:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      status:
+        type: string
+      total_amount:
+        type: number
+    type: object
+  internal_adapters_primary_api_order.updateStatusReq:
+    properties:
+      status:
+        type: string
+    type: object
+  internal_adapters_primary_api_product.addProductReq:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      sku:
+        type: string
+      stock_qty:
+        type: integer
+    type: object
+  internal_adapters_primary_api_product.addProductResp:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      sku:
+        type: string
+    type: object
+  internal_adapters_primary_api_product.editProductReq:
+    properties:
+      active:
+        type: boolean
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      sku:
+        type: string
+      stock_qty:
+        type: integer
+    type: object
+  internal_adapters_primary_api_product.editProductResp:
+    properties:
+      active:
+        type: boolean
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      sku:
+        type: string
+      stock_qty:
+        type: integer
+    type: object
+  internal_adapters_primary_api_product.getProductResp:
+    properties:
+      active:
+        type: boolean
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      sku:
+        type: string
+      stock_qty:
+        type: integer
+    type: object
+  internal_adapters_primary_api_product.listProductsResp:
+    properties:
+      products:
+        items:
+          $ref: '#/definitions/internal_adapters_primary_api_product.productInfoResp'
+        type: array
+    type: object
+  internal_adapters_primary_api_product.productInfoResp:
+    properties:
+      active:
+        type: boolean
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      sku:
+        type: string
+      stock_qty:
+        type: integer
+    type: object
+  internal_adapters_primary_api_user.changePasswordProfileReq:
+    properties:
+      current_password:
+        type: string
+      id:
+        type: string
+      new_password:
+        type: string
+    type: object
+  internal_adapters_primary_api_user.deleteAccountReq:
+    properties:
+      id:
+        type: string
+      session_id:
+        type: string
+    type: object
+  internal_adapters_primary_api_user.getUserProfileReq:
+    properties:
+      id:
+        type: string
+    type: object
+  internal_adapters_primary_api_user.getUserProfileResp:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      is_admin:
+        type: boolean
+      name:
+        type: string
+    type: object
+  internal_adapters_primary_api_user.listUsersResp:
+    properties:
+      users:
+        items:
+          $ref: '#/definitions/internal_adapters_primary_api_user.userInfo'
+        type: array
+    type: object
+  internal_adapters_primary_api_user.loginUserReq:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  internal_adapters_primary_api_user.loginUserResp:
+    properties:
+      access_token:
+        type: string
+      access_token_expires_at:
+        type: string
+      email:
+        type: string
+      is_admin:
+        type: boolean
+      name:
+        type: string
+      refresh_token:
+        type: string
+      refresh_token_expires_at:
+        type: string
+      session_id:
+        type: string
+    type: object
+  internal_adapters_primary_api_user.registerUserRequest:
+    properties:
+      email:
+        type: string
+      is_admin:
+        type: boolean
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  internal_adapters_primary_api_user.registerUserResp:
+    properties:
+      id:
+        type: string
+    type: object
+  internal_adapters_primary_api_user.renewAccessTokenReq:
+    properties:
+      refresh_token:
+        type: string
+    type: object
+  internal_adapters_primary_api_user.renewAccessTokenResp:
+    properties:
+      access_token:
+        type: string
+      access_token_expires_at:
+        type: string
+    type: object
+  internal_adapters_primary_api_user.updateUserProfileReq:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  internal_adapters_primary_api_user.userInfo:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      is_admin:
+        type: boolean
+      name:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@example.com
+    name: API Support
+  description: |-
+    A RESTful e-commerce API built with Go using hexagonal architecture.
+    Features: User authentication (JWT), Product management, Order processing, Address management.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: E-Commerce API
+  version: "1.0"
+paths:
+  /addresses:
+    get:
+      consumes:
+      - application/json
+      description: Get all addresses for the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_adapters_primary_api_address.listAddressesResp'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: List all addresses
+      tags:
+      - Addresses
+    post:
+      consumes:
+      - application/json
+      description: Create a new address for the authenticated user
+      parameters:
+      - description: Address data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_primary_api_address.addAddressReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_adapters_primary_api_address.addAddressResp'
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Add a new address
+      tags:
+      - Addresses
+  /addresses/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an address by ID
+      parameters:
+      - description: Address ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Delete an address
+      tags:
+      - Addresses
+  /addresses/{id}/default:
+    put:
+      consumes:
+      - application/json
+      description: Set an address as the default address
+      parameters:
+      - description: Address ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Set default address
+      tags:
+      - Addresses
+  /addresses/default:
+    get:
+      consumes:
+      - application/json
+      description: Get the default address for the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_adapters_primary_api_address.getDefaultAddressResp'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "404":
+          description: Not found
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get default address
+      tags:
+      - Addresses
+  /admin/orders/{id}/status:
+    put:
+      consumes:
+      - application/json
+      description: Update the status of an order (admin only)
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: New status
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_primary_api_order.updateStatusReq'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Update order status (Admin)
+      tags:
+      - Admin
+  /admin/products:
+    post:
+      consumes:
+      - application/json
+      description: Create a new product (admin only)
+      parameters:
+      - description: Product data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_primary_api_product.addProductReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_adapters_primary_api_product.addProductResp'
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Add a new product (Admin)
+      tags:
+      - Admin
+  /admin/products/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a product by ID (admin only)
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not found
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Delete a product (Admin)
+      tags:
+      - Admin
+    put:
+      consumes:
+      - application/json
+      description: Update product details (admin only)
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated product data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_primary_api_product.editProductReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_adapters_primary_api_product.editProductResp'
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Edit a product (Admin)
+      tags:
+      - Admin
+  /admin/users:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all users (admin only)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_adapters_primary_api_user.listUsersResp'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: List all users (Admin)
+      tags:
+      - Admin
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user and return tokens
+      parameters:
+      - description: Login credentials
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_primary_api_user.loginUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_adapters_primary_api_user.loginUserResp'
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Login user
+      tags:
+      - Auth
+  /auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: Invalidate user session
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Logout user
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user account
+      parameters:
+      - description: User registration data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_primary_api_user.registerUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_adapters_primary_api_user.registerUserResp'
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Register a new user
+      tags:
+      - Auth
+  /auth/renew:
+    post:
+      consumes:
+      - application/json
+      description: Get a new access token using refresh token
+      parameters:
+      - description: Refresh token
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_primary_api_user.renewAccessTokenReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_adapters_primary_api_user.renewAccessTokenResp'
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Renew access token
+      tags:
+      - Auth
+  /items:
+    get:
+      consumes:
+      - application/json
+      description: Get all items across all orders for the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_adapters_primary_api_items.listItemsResp'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: List all user items
+      tags:
+      - Items
+  /orders:
+    get:
+      consumes:
+      - application/json
+      description: Get all orders for the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_adapters_primary_api_order.listOrdersResp'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: List user orders
+      tags:
+      - Orders
+    post:
+      consumes:
+      - application/json
+      description: Create a new order with items
+      parameters:
+      - description: Order data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_primary_api_order.placeOrderReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_adapters_primary_api_order.placeOrderResp'
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Place a new order
+      tags:
+      - Orders
+  /orders/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get order details by ID
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_adapters_primary_api_order.getOrderResp'
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "404":
+          description: Not found
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get order details
+      tags:
+      - Orders
+  /orders/{id}/cancel:
+    post:
+      consumes:
+      - application/json
+      description: Cancel an order by ID
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Cancel an order
+      tags:
+      - Orders
+  /orders/{orderId}/items:
+    get:
+      consumes:
+      - application/json
+      description: Get all items for a specific order
+      parameters:
+      - description: Order ID
+        in: path
+        name: orderId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_adapters_primary_api_items.listItemsResp'
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: List items by order
+      tags:
+      - Items
+    post:
+      consumes:
+      - application/json
+      description: Add a new item to an existing order
+      parameters:
+      - description: Order ID
+        in: path
+        name: orderId
+        required: true
+        type: string
+      - description: Item data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_primary_api_items.addItemReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_adapters_primary_api_items.addItemResp'
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Add item to order
+      tags:
+      - Items
+  /orders/{orderId}/items/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an item from an order
+      parameters:
+      - description: Order ID
+        in: path
+        name: orderId
+        required: true
+        type: string
+      - description: Item ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Delete an item
+      tags:
+      - Items
+    get:
+      consumes:
+      - application/json
+      description: Get item details by ID
+      parameters:
+      - description: Order ID
+        in: path
+        name: orderId
+        required: true
+        type: string
+      - description: Item ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_adapters_primary_api_items.getItemResp'
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "404":
+          description: Not found
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get item details
+      tags:
+      - Items
+  /products:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all products
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_adapters_primary_api_product.listProductsResp'
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: List all products
+      tags:
+      - Products
+  /products/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get product details by ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_adapters_primary_api_product.getProductResp'
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "404":
+          description: Not found
+          schema:
+            type: string
+      summary: Get a product
+      tags:
+      - Products
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user account
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Account deletion data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_primary_api_user.deleteAccountReq'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Delete account
+      tags:
+      - Users
+    get:
+      consumes:
+      - application/json
+      description: Get user profile by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: User ID
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_primary_api_user.getUserProfileReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_adapters_primary_api_user.getUserProfileResp'
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get user profile
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Update user profile information
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated profile data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_primary_api_user.updateUserProfileReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Update user profile
+      tags:
+      - Users
+  /users/{id}/password:
+    put:
+      consumes:
+      - application/json
+      description: Change user password
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Password change data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_primary_api_user.changePasswordProfileReq'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Change password
+      tags:
+      - Users
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
