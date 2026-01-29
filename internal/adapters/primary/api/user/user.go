@@ -321,6 +321,7 @@ func (h *Handler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	res, err := h.svc.LoginUser(r.Context(), in)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
 	}
 	resp := loginUserResp{
 		SessionID:             res.SessionID,
@@ -332,6 +333,7 @@ func (h *Handler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		Email:                 res.Email,
 		IsAdmin:               res.IsAdmin,
 	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK) // 200
 	json.NewEncoder(w).Encode(resp)
@@ -362,6 +364,7 @@ func (h *Handler) LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	w.WriteHeader(http.StatusNoContent) // 204
 }
 
@@ -382,6 +385,7 @@ func (h *Handler) RenewAccessTokenHandler(w http.ResponseWriter, r *http.Request
 		http.Error(w, "invalid request", http.StatusBadRequest)
 		return
 	}
+
 	in := coreuser.RenewAccessTokenReq{
 		RefreshToken: req.RefreshToken,
 	}
